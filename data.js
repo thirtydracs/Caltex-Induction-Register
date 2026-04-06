@@ -70,7 +70,7 @@ const inductionData = [
     "[Full Legal Name] Last Name": "Tabikh",
     "Phone Number": "0483 816 461",
     "Email": "mitchtabikh@gmail.con",
-    "Company Name": "Pge",
+    "Company Name": "Plumbing Gas Earthmoving",
     "[Emergency Contact] First Name": "Katrina",
     "[Emergency Contact] Last Name": "Tabikh",
     "Emergency Phone Number": "4409276495",
