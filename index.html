@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +20,7 @@ body {
 }
 
 h1 {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 /* KPI */
@@ -73,19 +74,44 @@ th {
   background: #fafafa;
 }
 
-/* Print */
+/* PRINT STYLES */
 @media print {
-  .toolbar {
+  body {
+    background: white;
+  }
+
+  .toolbar, .kpis {
     display: none;
   }
+
+  h1 {
+    font-size: 20px;
+    margin-bottom: 5px;
+  }
+
+  .print-date {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+}
+
+.print-date {
+  display: none;
 }
 </style>
 </head>
 
 <body>
+
 <div class="wrap">
 
 <h1>Caltex D'Aguilar - Induction Register</h1>
+<div class="print-date" id="printDate"></div>
 
 <div class="kpis">
   <div class="kpi">
@@ -103,7 +129,7 @@ th {
   <select id="companyFilter">
     <option value="">All Companies</option>
   </select>
-  <button onclick="window.print()">Print</button>
+  <button onclick="window.print()">Print Register</button>
 </div>
 
 <table>
@@ -132,6 +158,10 @@ const body = document.getElementById("tableBody");
 const search = document.getElementById("search");
 const filter = document.getElementById("companyFilter");
 
+/* PRINT DATE */
+document.getElementById("printDate").innerText =
+  "Printed: " + new Date().toLocaleString();
+
 /* FULL NAME */
 function fullName(x){
   return `${x["[Full Legal Name] First Name"]} ${x["[Full Legal Name] Last Name"]}`;
@@ -142,7 +172,7 @@ function emergencyName(x){
   return `${x["[Emergency Contact] First Name"]} ${x["[Emergency Contact] Last Name"]}`;
 }
 
-/* LOAD COMPANY FILTER */
+/* LOAD COMPANIES */
 function loadCompanies(){
   const companies = [...new Set(inductionData.map(x => x["Company Name"]))];
 
@@ -154,7 +184,7 @@ function loadCompanies(){
   });
 }
 
-/* RENDER TABLE */
+/* RENDER */
 function render(){
 
   const term = search.value.toLowerCase();
@@ -192,17 +222,14 @@ function render(){
     body.appendChild(row);
   });
 
-  /* KPIs */
   document.getElementById("total").innerText = inductionData.length;
   document.getElementById("companies").innerText =
     new Set(inductionData.map(x => x["Company Name"])).size;
 }
 
-/* EVENTS */
 search.addEventListener("input", render);
 filter.addEventListener("change", render);
 
-/* INIT */
 loadCompanies();
 render();
 
