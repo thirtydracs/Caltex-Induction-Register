@@ -1,1 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caltex D'Aguilar - Induction Register</title>
 
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f4f6f8;
+}
+
+.wrap {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+.kpis {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.kpi {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  flex: 1;
+}
+
+.kpi h2 {
+  margin: 0;
+}
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+input, select {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background: #fafafa;
+  text-align: left;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<h1>Caltex D'Aguilar - Induction Register</h1>
+
+<div class="kpis">
+  <div class="kpi">
+    <p>Total Workers</p>
+    <h2 id="total"></h2>
+  </div>
+  <div class="kpi">
+    <p>Companies</p>
+    <h2 id="companies"></h2>
+  </div>
+</div>
+
+<div class="toolbar">
+  <input type="text" id="search" placeholder="Search...">
+  <select id="companyFilter">
+    <option value="">All Companies</option>
+  </select>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Company</th>
+<th>Phone</th>
+<th>Email</th>
+<th>Emergency</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+
+</div>
+
+<script src="data.js"></script>
+
+<script>
+const body = document.getElementById("tableBody");
+const search = document.getElementById("search");
+const filter = document.getElementById("companyFilter");
+
+function fullName(x){
+  return x["[Full Legal Name] First Name"] + " " + x["[Full Legal Name] Last Name"];
+}
+
+function loadCompanies(){
+  const companies = [...new Set(inductionData.map(x => x["Company Name"]))];
+  companies.forEach(c => {
+    const o = document.createElement("option");
+    o.value = c;
+    o.textContent = c;
+    filter.appendChild(o);
+  });
+}
+
+function render(){
+  const term = search.value.toLowerCase();
+  const comp = filter.value;
+
+  body.innerHTML = "";
+
+  const filtered = inductionData.filter(x => {
+    return (
+      fullName(x).toLowerCase().includes(term) &&
+      (!comp || x["Company Name"] === comp)
+    );
+  });
+
+  filtered.forEach(x => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${fullName(x)}</td>
+      <td>${x["Company Name"]}</td>
+      <td>${x["Phone Number"]}</td>
+      <td>${x["Email"]}</td>
+      <td>${x["[Emergency Contact] First Name"]} ${x["[Emergency Contact] Last Name"]}</td>
+      <td>${x["Submission Date"]}</td>
+    `;
+    body.appendChild(row);
+  });
+
+  document.getElementById("total").innerText = inductionData.length;
+  document.getElementById("companies").innerText = new Set(inductionData.map(x => x["Company Name"])).size;
+}
+
+search.addEventListener("input", render);
+filter.addEventListener("change", render);
+
+loadCompanies();
+render();
+</script>
+
+</body>
+</html>
