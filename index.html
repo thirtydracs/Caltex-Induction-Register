@@ -1,672 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Caltex D'Aguilar - Induction Register</title>
-  <style>
-    :root{
-      --bg:#f3f5f7;
-      --card:#ffffff;
-      --line:#d9dee5;
-      --text:#15202b;
-      --muted:#5b6876;
-      --accent:#0f4c81;
-      --accent-soft:#e8f1f8;
-      --success:#1f7a45;
-      --shadow:0 10px 30px rgba(16,24,40,.08);
-      --radius:18px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caltex D'Aguilar - Induction Register</title>
 
-    * {
-      box-sizing: border-box;
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f4f6f8;
+}
 
-    body{
-      margin:0;
-      font-family: Arial, Helvetica, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
+.wrap {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
 
-    .wrap{
-      max-width:1400px;
-      margin:0 auto;
-      padding:24px 16px 40px;
-    }
+h1 {
+  margin-bottom: 20px;
+}
 
-    .hero{
-      background:linear-gradient(135deg,#0f4c81 0%, #174f66 100%);
-      color:#fff;
-      border-radius:24px;
-      padding:28px 24px;
-      box-shadow:var(--shadow);
-      margin-bottom:20px;
-    }
+/* KPI */
+.kpis {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
 
-    .eyebrow{
-      font-size:12px;
-      letter-spacing:1.2px;
-      text-transform:uppercase;
-      opacity:.82;
-      margin-bottom:10px;
-    }
+.kpi {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  flex: 1;
+  text-align: center;
+}
 
-    h1{
-      margin:0 0 8px;
-      font-size:32px;
-      line-height:1.1;
-    }
+/* Toolbar */
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
 
-    .sub{
-      margin:0;
-      font-size:15px;
-      color:rgba(255,255,255,.86);
-      max-width:850px;
-    }
+input, select, button {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
 
-    .kpis{
-      display:grid;
-      grid-template-columns:repeat(4, minmax(0,1fr));
-      gap:14px;
-      margin:20px 0;
-    }
+button {
+  background: #0f4c81;
+  color: white;
+  cursor: pointer;
+}
 
-    .kpi{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:18px;
-      box-shadow:var(--shadow);
-    }
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
 
-    .kpi-label{
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.8px;
-      color:var(--muted);
-      margin-bottom:8px;
-    }
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
 
-    .kpi-value{
-      font-size:28px;
-      font-weight:700;
-      line-height:1;
-      margin-bottom:6px;
-    }
+th {
+  background: #fafafa;
+}
 
-    .kpi-note{
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .toolbar{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:16px;
-      box-shadow:var(--shadow);
-      display:grid;
-      grid-template-columns:2fr 1.2fr 1fr auto auto;
-      gap:12px;
-      align-items:end;
-      margin-bottom:18px;
-    }
-
-    .field label{
-      display:block;
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.8px;
-      color:var(--muted);
-      margin-bottom:6px;
-    }
-
-    .field input,
-    .field select{
-      width:100%;
-      padding:12px 14px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      font-size:14px;
-      background:#fff;
-      color:var(--text);
-    }
-
-    .btn{
-      border:none;
-      background:var(--accent);
-      color:#fff;
-      border-radius:12px;
-      padding:12px 16px;
-      font-size:14px;
-      font-weight:700;
-      cursor:pointer;
-      min-height:44px;
-      white-space:nowrap;
-    }
-
-    .btn.secondary{
-      background:#e9eef3;
-      color:var(--text);
-    }
-
-    .table-card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:24px;
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-
-    .table-top{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      align-items:center;
-      padding:16px 18px;
-      border-bottom:1px solid var(--line);
-      background:#fbfcfd;
-    }
-
-    .table-top h2{
-      margin:0;
-      font-size:18px;
-    }
-
-    .results-note{
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .table-wrap{
-      width:100%;
-      overflow:auto;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      min-width:1150px;
-    }
-
-    th, td{
-      padding:14px 12px;
-      border-bottom:1px solid #edf1f4;
-      text-align:left;
-      vertical-align:top;
-      font-size:14px;
-    }
-
-    th{
-      position:sticky;
-      top:0;
-      background:#f9fbfc;
-      z-index:1;
-      font-size:12px;
-      text-transform:uppercase;
-      letter-spacing:.7px;
-      color:var(--muted);
-    }
-
-    tbody tr:hover{
-      background:#fafcff;
-    }
-
-    .name{
-      font-weight:700;
-    }
-
-    .company-tag{
-      display:inline-block;
-      padding:6px 10px;
-      border-radius:999px;
-      background:var(--accent-soft);
-      color:var(--accent);
-      font-size:12px;
-      font-weight:700;
-      white-space:nowrap;
-    }
-
-    .date-badge{
-      display:inline-block;
-      padding:6px 10px;
-      border-radius:999px;
-      background:#edf7ef;
-      color:var(--success);
-      font-size:12px;
-      font-weight:700;
-      white-space:nowrap;
-    }
-
-    .empty{
-      padding:40px 20px;
-      text-align:center;
-      color:var(--muted);
-      display:none;
-    }
-
-    .print-only{
-      display:none;
-    }
-
-    @media (max-width: 1024px){
-      .kpis{
-        grid-template-columns:repeat(2, minmax(0,1fr));
-      }
-
-      .toolbar{
-        grid-template-columns:1fr 1fr;
-      }
-    }
-
-    @media (max-width: 640px){
-      .wrap{
-        padding:14px 10px 30px;
-      }
-
-      .hero{
-        padding:22px 16px;
-        border-radius:18px;
-      }
-
-      h1{
-        font-size:26px;
-      }
-
-      .kpis{
-        grid-template-columns:1fr;
-      }
-
-      .toolbar{
-        grid-template-columns:1fr;
-      }
-
-      .table-top{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-
-      th, td{
-        padding:12px 10px;
-        font-size:13px;
-      }
-    }
-
-    @media print {
-      body{
-        background:#fff;
-      }
-
-      .wrap{
-        max-width:100%;
-        padding:0;
-      }
-
-      .hero{
-        background:#fff;
-        color:#000;
-        box-shadow:none;
-        border:1px solid #ccc;
-        margin-bottom:12px;
-      }
-
-      .sub{
-        color:#333;
-      }
-
-      .toolbar,
-      .kpis .kpi:nth-child(4),
-      .no-print{
-        display:none !important;
-      }
-
-      .kpis{
-        grid-template-columns:repeat(3, 1fr);
-        gap:8px;
-        margin:0 0 12px;
-      }
-
-      .kpi{
-        box-shadow:none;
-        border:1px solid #ccc;
-      }
-
-      .table-card{
-        box-shadow:none;
-        border:1px solid #ccc;
-        border-radius:0;
-      }
-
-      .table-top{
-        background:#fff;
-      }
-
-      .print-only{
-        display:block;
-        margin:0 0 10px;
-        font-size:12px;
-        color:#333;
-      }
-
-      table{
-        min-width:unset;
-      }
-
-      th, td{
-        font-size:11px;
-        padding:8px 6px;
-        color:#000;
-      }
-
-      th{
-        position:static;
-        background:#f2f2f2;
-      }
-
-      .company-tag,
-      .date-badge{
-        background:none;
-        color:#000;
-        padding:0;
-        border-radius:0;
-        font-weight:600;
-      }
-    }
-  </style>
+/* Print */
+@media print {
+  .toolbar {
+    display: none;
+  }
+}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <section class="hero">
-      <div class="eyebrow">Site Register</div>
-      <h1>Caltex D'Aguilar - Induction Register</h1>
-      <p class="sub">
-        Live induction register showing inducted workers, company details, worker contact info
-        and emergency contact records for the Caltex D'Aguilar project.
-      </p>
-    </section>
+<div class="wrap">
 
-    <section class="kpis">
-      <div class="kpi">
-        <div class="kpi-label">Total Inducted</div>
-        <div class="kpi-value" id="totalWorkers">0</div>
-        <div class="kpi-note">Workers in this register</div>
-      </div>
+<h1>Caltex D'Aguilar - Induction Register</h1>
 
-      <div class="kpi">
-        <div class="kpi-label">Companies</div>
-        <div class="kpi-value" id="totalCompanies">0</div>
-        <div class="kpi-note">Unique subcontractors / businesses</div>
-      </div>
-
-      <div class="kpi">
-        <div class="kpi-label">Latest Induction</div>
-        <div class="kpi-value" id="latestDate">-</div>
-        <div class="kpi-note">Most recent submission date</div>
-      </div>
-
-      <div class="kpi">
-        <div class="kpi-label">Showing</div>
-        <div class="kpi-value" id="showingCount">0</div>
-        <div class="kpi-note">Current filtered results</div>
-      </div>
-    </section>
-
-    <section class="toolbar no-print">
-      <div class="field">
-        <label for="searchInput">Search worker / company / email / phone</label>
-        <input type="text" id="searchInput" placeholder="Search by name, company, email or phone" />
-      </div>
-
-      <div class="field">
-        <label for="companyFilter">Filter by company</label>
-        <select id="companyFilter">
-          <option value="">All companies</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="sortSelect">Sort</label>
-        <select id="sortSelect">
-          <option value="latest">Latest first</option>
-          <option value="oldest">Oldest first</option>
-          <option value="az">Name A-Z</option>
-          <option value="company">Company A-Z</option>
-        </select>
-      </div>
-
-      <button class="btn secondary" id="resetBtn" type="button">Reset</button>
-      <button class="btn" id="printBtn" type="button">Print Register</button>
-    </section>
-
-    <section class="table-card">
-      <div class="table-top">
-        <div>
-          <h2>Induction Register</h2>
-          <div class="print-only" id="printDate"></div>
-        </div>
-        <div class="results-note" id="resultsNote">0 records</div>
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Worker</th>
-              <th>Company</th>
-              <th>Phone</th>
-              <th>Email</th>
-              <th>Emergency Contact</th>
-              <th>Emergency Phone</th>
-              <th>Submission Date</th>
-            </tr>
-          </thead>
-          <tbody id="registerBody"></tbody>
-        </table>
-      </div>
-
-      <div class="empty" id="emptyState">
-        No induction records match the current search or filter.
-      </div>
-    </section>
+<div class="kpis">
+  <div class="kpi">
+    <div>Total Workers</div>
+    <h2 id="total"></h2>
   </div>
+  <div class="kpi">
+    <div>Companies</div>
+    <h2 id="companies"></h2>
+  </div>
+</div>
 
-  <script src="data.js"></script>
-  <script>
-    const body = document.getElementById("registerBody");
-    const searchInput = document.getElementById("searchInput");
-    const companyFilter = document.getElementById("companyFilter");
-    const sortSelect = document.getElementById("sortSelect");
-    const resetBtn = document.getElementById("resetBtn");
-    const printBtn = document.getElementById("printBtn");
+<div class="toolbar">
+  <input type="text" id="search" placeholder="Search...">
+  <select id="companyFilter">
+    <option value="">All Companies</option>
+  </select>
+  <button onclick="window.print()">Print</button>
+</div>
 
-    const totalWorkers = document.getElementById("totalWorkers");
-    const totalCompanies = document.getElementById("totalCompanies");
-    const latestDate = document.getElementById("latestDate");
-    const showingCount = document.getElementById("showingCount");
-    const resultsNote = document.getElementById("resultsNote");
-    const emptyState = document.getElementById("emptyState");
-    const printDate = document.getElementById("printDate");
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Company</th>
+<th>Phone</th>
+<th>Email</th>
+<th>Emergency Contact</th>
+<th>Emergency Phone</th>
+<th>Date</th>
+</tr>
+</thead>
 
-    const records = Array.isArray(inductionData) ? inductionData : [];
+<tbody id="tableBody"></tbody>
+</table>
 
-    function parseDate(dateStr) {
-      if (!dateStr) return null;
+</div>
 
-      const cleaned = String(dateStr).trim().replace(/\s+/g, " ");
-      const match = cleaned.match(
-        /^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:,)?\s+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM|am|pm)$/
-      );
+<script src="data.js"></script>
 
-      if (match) {
-        let [, day, month, year, hour, minute, second, ampm] = match;
+<script>
 
-        day = Number(day);
-        month = Number(month) - 1;
-        year = Number(year);
-        hour = Number(hour);
-        minute = Number(minute);
-        second = Number(second || 0);
+const body = document.getElementById("tableBody");
+const search = document.getElementById("search");
+const filter = document.getElementById("companyFilter");
 
-        const upper = ampm.toUpperCase();
-        if (upper === "PM" && hour !== 12) hour += 12;
-        if (upper === "AM" && hour === 12) hour = 0;
+/* FULL NAME */
+function fullName(x){
+  return `${x["[Full Legal Name] First Name"]} ${x["[Full Legal Name] Last Name"]}`;
+}
 
-        return new Date(year, month, day, hour, minute, second);
-      }
+/* EMERGENCY NAME */
+function emergencyName(x){
+  return `${x["[Emergency Contact] First Name"]} ${x["[Emergency Contact] Last Name"]}`;
+}
 
-      const fallback = new Date(cleaned);
-      return isNaN(fallback) ? null : fallback;
-    }
+/* LOAD COMPANY FILTER */
+function loadCompanies(){
+  const companies = [...new Set(inductionData.map(x => x["Company Name"]))];
 
-    function formatDate(dateStr) {
-      const date = parseDate(dateStr);
-      if (!date) return dateStr || "-";
+  companies.forEach(c => {
+    const o = document.createElement("option");
+    o.value = c;
+    o.textContent = c;
+    filter.appendChild(o);
+  });
+}
 
-      return date.toLocaleDateString("en-AU", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric"
-      });
-    }
+/* RENDER TABLE */
+function render(){
 
-    function formatDateTime(dateStr) {
-      const date = parseDate(dateStr);
-      if (!date) return dateStr || "-";
+  const term = search.value.toLowerCase();
+  const comp = filter.value;
 
-      return date.toLocaleString("en-AU", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour: "numeric",
-        minute: "2-digit"
-      });
-    }
+  body.innerHTML = "";
 
-    function fullName(item) {
-      return `${item["[Full Legal Name] First Name"] || ""} ${item["[Full Legal Name] Last Name"] || ""}`.trim();
-    }
+  const filtered = inductionData.filter(x => {
 
-    function emergencyName(item) {
-      return `${item["[Emergency Contact] First Name"] || ""} ${item["[Emergency Contact] Last Name"] || ""}`.trim();
-    }
+    const text = `
+      ${fullName(x)}
+      ${x["Company Name"]}
+      ${x["Email"]}
+      ${x["Phone Number"]}
+      ${x["Emergency Phone Number"]}
+    `.toLowerCase();
 
-    function getCompanies(data) {
-      return [...new Set(
-        data
-          .map(item => (item["Company Name"] || "").trim())
-          .filter(Boolean)
-      )].sort((a, b) => a.localeCompare(b));
-    }
+    return text.includes(term) && (!comp || x["Company Name"] === comp);
+  });
 
-    function fillCompanyFilter() {
-      const companies = getCompanies(records);
+  filtered.forEach(x => {
 
-      companies.forEach(company => {
-        const option = document.createElement("option");
-        option.value = company;
-        option.textContent = company;
-        companyFilter.appendChild(option);
-      });
-    }
+    const row = document.createElement("tr");
 
-    function sortRecords(data) {
-      const type = sortSelect.value;
-      const sorted = [...data];
+    row.innerHTML = `
+      <td>${fullName(x)}</td>
+      <td>${x["Company Name"]}</td>
+      <td>${x["Phone Number"]}</td>
+      <td>${x["Email"]}</td>
+      <td>${emergencyName(x)}</td>
+      <td>${x["Emergency Phone Number"]}</td>
+      <td>${x["Submission Date"]}</td>
+    `;
 
-      if (type === "latest") {
-        sorted.sort((a, b) => (parseDate(b["Submission Date"]) || 0) - (parseDate(a["Submission Date"]) || 0));
-      } else if (type === "oldest") {
-        sorted.sort((a, b) => (parseDate(a["Submission Date"]) || 0) - (parseDate(b["Submission Date"]) || 0));
-      } else if (type === "az") {
-        sorted.sort((a, b) => fullName(a).localeCompare(fullName(b)));
-      } else if (type === "company") {
-        sorted.sort((a, b) => (a["Company Name"] || "").localeCompare(b["Company Name"] || ""));
-      }
+    body.appendChild(row);
+  });
 
-      return sorted;
-    }
+  /* KPIs */
+  document.getElementById("total").innerText = inductionData.length;
+  document.getElementById("companies").innerText =
+    new Set(inductionData.map(x => x["Company Name"])).size;
+}
 
-    function filterRecords() {
-      const term = searchInput.value.trim().toLowerCase();
-      const company = companyFilter.value;
+/* EVENTS */
+search.addEventListener("input", render);
+filter.addEventListener("change", render);
 
-      let filtered = records.filter(item => {
-        const haystack = [
-          fullName(item),
-          item["Company Name"],
-          item["Email"],
-          item["Phone Number"],
-          emergencyName(item),
-          item["Emergency Phone Number"]
-        ].join(" ").toLowerCase();
+/* INIT */
+loadCompanies();
+render();
 
-        const matchesSearch = !term || haystack.includes(term);
-        const matchesCompany = !company || (item["Company Name"] || "") === company;
+</script>
 
-        return matchesSearch && matchesCompany;
-      });
-
-      return sortRecords(filtered);
-    }
-
-    function render() {
-      const filtered = filterRecords();
-      body.innerHTML = "";
-
-      filtered.forEach(item => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td><div class="name">${fullName(item) || "-"}</div></td>
-          <td><span class="company-tag">${item["Company Name"] || "-"}</span></td>
-          <td>${item["Phone Number"] || "-"}</td>
-          <td>${item["Email"] || "-"}</td>
-          <td>${emergencyName(item) || "-"}</td>
-          <td>${item["Emergency Phone Number"] || "-"}</td>
-          <td><span class="date-badge">${formatDateTime(item["Submission Date"])}</span></td>
-        `;
-        body.appendChild(row);
-      });
-
-      showingCount.textContent = filtered.length;
-      resultsNote.textContent = `${filtered.length} record${filtered.length === 1 ? "" : "s"}`;
-      emptyState.style.display = filtered.length ? "none" : "block";
-    }
-
-    function updateKpis() {
-      totalWorkers.textContent = records.length;
-      totalCompanies.textContent = getCompanies(records).length;
-
-      const dates = records
-        .map(item => parseDate(item["Submission Date"]))
-        .filter(Boolean)
-        .sort((a, b) => b - a);
-
-      latestDate.textContent = dates.length
-        ? dates[0].toLocaleDateString("en-AU", { day: "2-digit", month: "short", year: "numeric" })
-        : "-";
-    }
-
-    searchInput.addEventListener("input", render);
-    companyFilter.addEventListener("change", render);
-    sortSelect.addEventListener("change", render);
-
-    resetBtn.addEventListener("click", () => {
-      searchInput.value = "";
-      companyFilter.value = "";
-      sortSelect.value = "latest";
-      render();
-    });
-
-    printBtn.addEventListener("click", () => {
-      window.print();
-    });
-
-    printDate.textContent = `Printed: ${new Date().toLocaleString("en-AU")}`;
-
-    fillCompanyFilter();
-    updateKpis();
-    render();
-  </script>
 </body>
 </html>
